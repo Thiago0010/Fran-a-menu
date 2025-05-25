@@ -51,5 +51,118 @@
       </a>
     </div>
   </div>
+   <div class="quiz-container">
+    <h1>Quiz de Conhecimentos</h1>
+    <div id="quiz">
+      <p id="question">Carregando pergunta...</p>
+      <div id="answers"></div>
+      <button id="next-btn">Próxima</button>
+    </div>
+    <p id="score" style="display: none;"></p>
+  </div>
+   <section class="chefs-container">
+    <div class="chef-card">
+      <img src="https://tse2.mm.bing.net/th?id=OIP.d48Wh_NTKt2VRLKuDq7kTwHaEJ&pid=Api&P=0&h=220" alt="Auguste Escoffier" class="chef-img">
+      <h2>Auguste Escoffier</h2>
+      <p>Considerado o pai da gastronomia moderna, Escoffier revolucionou as cozinhas da França com organização, técnica e o famoso sistema de brigada.</p>
+    </div>
+
+    <div class="chef-card">
+      <img src="https://tse3.mm.bing.net/th?id=OIP.f33k317yXanQWKNt1dFXyAHaHa&pid=Api&P=0&h=220" alt="Paul Bocuse" class="chef-img">
+      <h2>Paul Bocuse</h2>
+      <p>Ícone da <i>nouvelle cuisine</i>, Bocuse promoveu uma cozinha mais leve e artística. Criou o concurso internacional Bocuse d'Or.</p>
+    </div>
+
+    <div class="chef-card">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/7/71/Anne_Sophie_Pic.jpg" alt="Anne-Sophie Pic" class="chef-img">
+      <h2>Anne-Sophie Pic</h2>
+      <p>A única chef francesa com 3 estrelas Michelin, é conhecida por sua delicadeza e inovação na alta gastronomia.</p>
+    </div>
+
+    <div class="chef-card">
+      <img src="https://tse2.mm.bing.net/th?id=OIP.2AEwstVVFxVzxzUTYqo9iQHaEJ&pid=Api&P=0&h=220" alt="Alain Ducasse" class="chef-img">
+      <h2>Alain Ducasse</h2>
+      <p>Um dos chefs mais premiados do mundo, Alain Ducasse é dono de vários restaurantes estrelados e defensor da culinária sustentável.</p>
+    </div>
+  </section>
+
+  <script>
+    const questions = [
+  {
+    question: "1. Qual desses pratos é tradicionalmente servido nos Alpes Franceses?",
+    answers: ["Ratatouille", "Tartiflette", " Croissant", "Quiche Lorraine"],
+    correct: 1
+  },
+  {
+    question: "2. Qual desses ingredientes é essencial para preparar o Aligot?",
+    answers: ["Creme de leite", " Frango", " Queijo Tomme fraîche ", " Tomate"],
+    correct: 2
+  },
+  {
+    question: "3. O Clafoutis é uma sobremesa feita tradicionalmente com:",
+    answers: [" Maçã", " Pêssego", "Ameixa", "Cereja"],
+    correct: 3
+  },
+  {
+    question: "4. O que é o principal ingrediente do Croissant?",
+    answers: ["Massa folhada", "Pão de forma", "Bolo de chocolate", "Torta de maçã"],
+    correct: 0
+  },
+  {
+    question: "5. Qual prato é conhecido por sua textura elástica e é feito com purê de batata?",
+    answers: ["Ratatouille", "Aligot", "Tartiflette", "Crepe Suzette"],
+    correct: 1
+  }
+];
+
+let currentQuestion = 0;
+let score = 0;
+
+const questionEl = document.getElementById("question");
+const answersEl = document.getElementById("answers");
+const nextBtn = document.getElementById("next-btn");
+const scoreEl = document.getElementById("score");
+
+function showQuestion() {
+  const q = questions[currentQuestion];
+  questionEl.textContent = q.question;
+  answersEl.innerHTML = "";
+
+  q.answers.forEach((answer, index) => {
+    const btn = document.createElement("button");
+    btn.textContent = answer;
+    btn.classList.add("answer");
+    btn.addEventListener("click", () => checkAnswer(index));
+    answersEl.appendChild(btn);
+  });
+}
+
+function checkAnswer(selected) {
+  const correct = questions[currentQuestion].correct;
+  if (selected === correct) score++;
+
+  currentQuestion++;
+  if (currentQuestion < questions.length) {
+    showQuestion();
+  } else {
+    endQuiz();
+  }
+}
+
+function endQuiz() {
+  questionEl.style.display = "none";
+  answersEl.style.display = "none";
+  nextBtn.style.display = "none";
+  scoreEl.textContent = `Você acertou ${score} de ${questions.length} perguntas!`;
+  scoreEl.style.display = "block";
+}
+
+nextBtn.addEventListener("click", () => {
+  showQuestion();
+});
+
+showQuestion(); // inicia o quiz
+
+  </script>
 </body>
 </html>

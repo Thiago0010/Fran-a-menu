@@ -96,3 +96,98 @@ h1{
     text-decoration: none;
     color: #000;
 }
+
+
+
+.quiz-container {
+  background: white;
+  padding: 50px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+  margin: auto;
+}
+
+button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  border: none;
+  background-color: #4CAF50;
+  color: rgb(238, 238, 238);
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+.answer {
+  display: block;
+  margin: 10px 0;
+  padding: 10px;
+  background: #bebebeef;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.answer:hover {
+  background-color: #ddd;
+}
+#answers {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 2 colunas */
+  gap: 10px;
+  justify-items: center; /* centraliza os botões em cada coluna */
+}
+
+.chefs-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 40px 20px;
+      gap: 30px;
+    }
+
+    .chef-card {
+      background-color: #fff;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      width: 300px;
+      padding: 20px;
+      transition: transform 0.3s;
+    }
+
+    .chef-card:hover {
+      transform: scale(1.05);
+    }
+
+    .chef-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+
+    .chef-card h2 {
+      font-size: 22px;
+      margin-bottom: 10px;
+      color: #222;
+    }
+
+    .chef-card p {
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+      background-color: #f5f5f5;
+    }
