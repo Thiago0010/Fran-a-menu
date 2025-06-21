@@ -1,168 +1,540 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SINUSI | FRANÇA</title>
-  <link rel="stylesheet" href="/style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SINUSI | FRANÇA</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+<style>
+  /* Reset & base */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0; background: #fff; font-family: 'Poppins', sans-serif; color: #222;
+  }
+
+  /* Navbar */
+  .nav {
+    background-color: #0736cfec;
+    display: flex; justify-content: center; align-items: center;
+    list-style: none; margin: 0; padding: 0;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .nav li {
+    margin: 0 20px;
+  }
+  .nav a {
+    color: #f1efef; text-decoration: none;
+    font-weight: 600; padding: 15px 0; display: block;
+    transition: color 0.3s;
+  }
+  .nav a:hover,
+  .nav a:focus {
+    color: #ffd700;
+    outline: none;
+  }
+
+  /* Hamburger */
+  #menu-toggle {
+    display: none;
+  }
+  .hamburger {
+    display: none;
+    cursor: pointer;
+    flex-direction: column;
+    width: 25px;
+    height: 18px;
+    justify-content: space-between;
+    margin-right: 20px;
+  }
+  .hamburger span {
+    height: 3px;
+    background: #f1efef;
+    border-radius: 2px;
+  }
+  @media (max-width: 700px) {
+    .nav {
+      flex-direction: column;
+      display: none;
+    }
+    .nav.show {
+      display: flex;
+    }
+    .hamburger {
+      display: flex;
+    }
+    nav {
+      display: flex; justify-content: space-between; align-items: center;
+      background-color: #0736cfec;
+      padding: 0 10px;
+    }
+  }
+
+  /* Header */
+  h1.title {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 2.2rem;
+    color: #1a1a1a;
+    user-select: none;
+  }
+
+  /* Cards container */
+  .cards-container {
+    max-width: 900px;
+    margin: 30px auto 60px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
+    gap: 30px;
+    padding: 0 15px;
+  }
+
+  /* Card */
+  .card {
+    background: #fff3e0;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  .card:hover,
+  .card:focus-within {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgb(0 0 0 / 0.2);
+  }
+  .card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+    border-bottom: 3px solid #0736cf;
+  }
+  .card-content {
+    padding: 15px 20px 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .card-content h2 {
+    font-size: 1.3rem;
+    margin: 0 0 10px;
+    color: #0736cf;
+    user-select: none;
+  }
+  .card-content p {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    color: #444;
+    user-select: none;
+  }
+  .card-content a {
+    margin-top: 12px;
+    color: #0736cf;
+    font-weight: 600;
+    text-decoration: none;
+    align-self: flex-start;
+    transition: color 0.3s;
+  }
+  .card-content a:hover,
+  .card-content a:focus {
+    color: #ff8c00;
+    outline: none;
+  }
+
+  /* Quiz container */
+  .quiz-container {
+    max-width: 600px;
+    margin: 0 auto 70px;
+    background: #ffffff;
+    padding: 40px 35px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgb(0 0 0 / 0.08);
+    user-select: none;
+  }
+  .quiz-container h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 2rem;
+    color: #0736cf;
+  }
+  #question {
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+    min-height: 70px;
+    transition: opacity 0.5s ease;
+  }
+  #answers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+  }
+  .answer {
+    background: #bebebeef;
+    border: none;
+    padding: 14px 0;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: 600;
+    user-select: none;
+  }
+  .answer:hover:not(.disabled),
+  .answer:focus:not(.disabled) {
+    background: #d8d8d8;
+    outline: none;
+  }
+  .answer.disabled {
+    cursor: default;
+    opacity: 0.7;
+  }
+  .answer.correct {
+    background-color: #4CAF50 !important;
+    color: white;
+  }
+  .answer.incorrect {
+    background-color: #e74c3c !important;
+    color: white;
+  }
+  #next-btn {
+    margin-top: 30px;
+    padding: 12px 30px;
+    background: #0736cf;
+    color: white;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.3s ease;
+  }
+  #next-btn:hover,
+  #next-btn:focus {
+    background: #ff8c00;
+    outline: none;
+  }
+  #score {
+    font-size: 1.2rem;
+    text-align: center;
+    margin-top: 25px;
+    color: #222;
+    user-select: none;
+  }
+  #progress {
+    margin-bottom: 25px;
+    height: 10px;
+    background: #eee;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  #progress-bar {
+    height: 100%;
+    background: #0736cf;
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+
+  /* Chefs */
+  .chefs-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    padding: 40px 20px 80px;
+  }
+  .chef-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgb(0 0 0 / 0.1);
+    width: 280px;
+    padding: 20px;
+    transition: transform 0.3s ease;
+    user-select: none;
+  }
+  .chef-card:hover,
+  .chef-card:focus-within {
+    transform: scale(1.06);
+    box-shadow: 0 10px 30px rgb(0 0 0 / 0.15);
+  }
+  .chef-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 15px;
+  }
+  .chef-card h2 {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+    color: #0736cf;
+  }
+  .chef-card p {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #444;
+  }
+
+  /* Footer */
+  footer {
+    background: #f5f5f5;
+    text-align: center;
+    padding: 18px 12px;
+    font-size: 14px;
+    color: #666;
+    user-select: none;
+  }
+</style>
 </head>
 <body>
-  <nav class="navbar">
-    <ul class="nav">
-      <li><a href="#">Início</a></li>
-      <li><a href="#">Receitas</a></li>
-      <li><a href="#">História</a></li>
-    </ul>
-  </nav>
 
-  <h1>Sabores da França: Tradição em Cada Prato</h1>
+<nav>
+  <label for="menu-toggle" class="hamburger" aria-label="Abrir menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </label>
+  <input type="checkbox" id="menu-toggle" />
+  <ul class="nav" id="nav-menu" role="menu">
+    <li role="menuitem"><a href="#" tabindex="0">Início</a></li>
+    <li role="menuitem"><a href="/receitas.html" tabindex="0">Receitas</a></li>
+  </ul>
+</nav>
 
-  <div class="cards-container">
-    <div class="card">
-      <a href="croisant.html">
-      <img src="https://tse1.mm.bing.net/th?id=OIP.czag3Nzy9BUaORNT85Jf9AHaE8&pid=Api&P=0&h=220" alt="Croissant" />
+<h1 class="title">Sabores da França: Tradição em Cada Prato</h1>
+
+<section class="cards-container" aria-label="Pratos tradicionais franceses">
+  <article class="card" tabindex="0" aria-describedby="desc-croissant">
+    <img loading="lazy" src="https://tse1.mm.bing.net/th?id=OIP.czag3Nzy9BUaORNT85Jf9AHaE8&pid=Api&P=0&h=220" alt="Croissant dourado" />
+    <div class="card-content">
       <h2>Croissant</h2>
-      <p>O croissant é uma massa folhada amanteigada, símbolo das padarias francesas.</p>
-      </a>
+      <p id="desc-croissant">Massa folhada amanteigada, símbolo clássico das padarias francesas.</p>
+      <a href="croisant.html" aria-label="Saiba mais sobre Croissant">Mais detalhes</a>
     </div>
+  </article>
 
-    <div class="card">
-      <a href="clafoutis.html">
-      <img src="https://tse4.mm.bing.net/th?id=OIP.Pk8NaO1NF8zRFhiroVhf2wHaFS&pid=Api&P=0&h=220" alt="Clafoutis" />
+  <article class="card" tabindex="0" aria-describedby="desc-clafoutis">
+    <img loading="lazy" src="https://tse4.mm.bing.net/th?id=OIP.Pk8NaO1NF8zRFhiroVhf2wHaFS&pid=Api&P=0&h=220" alt="Clafoutis com cerejas frescas" />
+    <div class="card-content">
       <h2>Clafoutis</h2>
-      <p>Clafoutis é um doce com cerejas frescas em massa de flan, assado e polvilhado com açúcar.</p>
-      </a>
+      <p id="desc-clafoutis">Sobremesa francesa tradicional feita com cerejas frescas em massa de flan assado.</p>
+      <a href="clafoutis.html" aria-label="Saiba mais sobre Clafoutis">Mais detalhes</a>
     </div>
+  </article>
 
-    <div class="card">
-      <a href="tartiflette.html">
-      <img src="https://tse1.mm.bing.net/th?id=OIP.1-H5rSyiSkDSVGQx5YddxgHaE8&pid=Api&P=0&h=220" alt=" alt="Tartiflette" />
+  <article class="card" tabindex="0" aria-describedby="desc-tartiflette">
+    <img loading="lazy" src="https://tse1.mm.bing.net/th?id=OIP.1-H5rSyiSkDSVGQx5YddxgHaE8&pid=Api&P=0&h=220" />
+    <div class="card-content">
       <h2>Tartiflette</h2>
-      <p>Batatas, cebola, bacon e queijo Reblochon gratinado. Prato típico dos Alpes franceses.</p>
-      </a>
+      <p id="desc-tartiflette">Prato rico e cremoso com batata, queijo reblochon, bacon e cebola.</p>
+      <a href="tartiflette.html" aria-label="Saiba mais sobre Tartiflette">Mais detalhes</a>
     </div>
+  </article>
 
-    <div class="card">
-      <a href="aligot.html">
-      <img src="https://tse2.mm.bing.net/th?id=OIP.8xBLmpna0ek531JbKfxWGgHaE8&pid=Api&P=0&h=220" alt="Aligot" />
-      <h2>Aligot</h2>
-      <p>Aligot mistura purê de batata, queijo Tomme e alho, resultando numa textura elástica deliciosa.</p>
-      </a>
+  <article class="card" tabindex="0" aria-describedby="desc-ratatouille">
+    <img loading="lazy" src="https://tse2.mm.bing.net/th?id=OIP.dj3IjGhAfGMVF3_8C2hDCwHaE8&pid=Api&P=0&h=220" alt="Ratatouille colorida" />
+    <div class="card-content">
+      <h2>Ratatouille</h2>
+      <p id="desc-ratatouille">Clássico ensopado de legumes da região da Provença.</p>
+      <a href="ratatouille.html" aria-label="Saiba mais sobre Ratatouille">Mais detalhes</a>
     </div>
-  </div>
-   <div class="quiz-container">
-    <h1>Quiz de Conhecimentos</h1>
-    <div id="quiz">
-      <p id="question">Carregando pergunta...</p>
-      <div id="answers"></div>
-      <button id="next-btn">Próxima</button>
-    </div>
-    <p id="score" style="display: none;"></p>
-  </div>
-   <section class="chefs-container">
-    <div class="chef-card">
-      <img src="https://tse2.mm.bing.net/th?id=OIP.d48Wh_NTKt2VRLKuDq7kTwHaEJ&pid=Api&P=0&h=220" alt="Auguste Escoffier" class="chef-img">
-      <h2>Auguste Escoffier</h2>
-      <p>Considerado o pai da gastronomia moderna, Escoffier revolucionou as cozinhas da França com organização, técnica e o famoso sistema de brigada.</p>
-    </div>
+  </article>
+</section>
 
-    <div class="chef-card">
-      <img src="https://tse3.mm.bing.net/th?id=OIP.f33k317yXanQWKNt1dFXyAHaHa&pid=Api&P=0&h=220" alt="Paul Bocuse" class="chef-img">
-      <h2>Paul Bocuse</h2>
-      <p>Ícone da <i>nouvelle cuisine</i>, Bocuse promoveu uma cozinha mais leve e artística. Criou o concurso internacional Bocuse d'Or.</p>
-    </div>
+<section class="quiz-container" aria-label="Quiz sobre culinária francesa">
+  <h1>Quiz: Teste seus conhecimentos!</h1>
+  <div id="progress" aria-hidden="true"><div id="progress-bar"></div></div>
+  <div id="question" aria-live="polite"></div>
+  <div id="answers" role="list"></div>
+  <button id="next-btn" disabled>Próxima</button>
+  <div id="score" aria-live="polite" role="status"></div>
+</section>
 
-    <div class="chef-card">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/7/71/Anne_Sophie_Pic.jpg" alt="Anne-Sophie Pic" class="chef-img">
-      <h2>Anne-Sophie Pic</h2>
-      <p>A única chef francesa com 3 estrelas Michelin, é conhecida por sua delicadeza e inovação na alta gastronomia.</p>
-    </div>
+<section class="chefs-container" aria-label="Chefs famosos franceses">
+  <article class="chef-card" tabindex="0">
+    <img loading="lazy" class="chef-img" src="data:image/jpeg;base64,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" alt="Paul Bocuse, famoso chef francês" />
+    <h2>Paul Bocuse</h2>
+    <p>Considerado um dos maiores chefs franceses, mestre da nouvelle cuisine.</p>
+  </article>
+  <article class="chef-card" tabindex="0">
+    <img loading="lazy" class="chef-img" src="data:image/jpeg;base64,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" alt="Alain Ducasse, chef renomado" />
+    <h2>Alain Ducasse</h2>
+    <p>Chef com múltiplas estrelas Michelin, referência mundial em gastronomia.</p>
+  </article>
+  <article class="chef-card" tabindex="0">
+    <img loading="lazy" class="chef-img" src="data:image/webp;base64,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" alt=", celebridade gastronômica" />
+    <h2>Michel Bras</h2>
+    <p>Michel Bras é um chef francês famoso por sua cozinha criativa e natural, inspirada na região de Aubrac. É conhecido pelo prato "gargouillou" e por valorizar ingredientes locais e sazonais.</p>
+  </article>
+</section>
 
-    <div class="chef-card">
-      <img src="https://tse2.mm.bing.net/th?id=OIP.2AEwstVVFxVzxzUTYqo9iQHaEJ&pid=Api&P=0&h=220" alt="Alain Ducasse" class="chef-img">
-      <h2>Alain Ducasse</h2>
-      <p>Um dos chefs mais premiados do mundo, Alain Ducasse é dono de vários restaurantes estrelados e defensor da culinária sustentável.</p>
-    </div>
-  </section>
+<footer>
+  &copy; 2025 SINUSI | Todos os direitos reservados
+</footer>
 
-  <script>
-    const questions = [
-  {
-    question: "1. Qual desses pratos é tradicionalmente servido nos Alpes Franceses?",
-    answers: ["Ratatouille", "Tartiflette", " Croissant", "Quiche Lorraine"],
-    correct: 1
-  },
-  {
-    question: "2. Qual desses ingredientes é essencial para preparar o Aligot?",
-    answers: ["Creme de leite", " Frango", " Queijo Tomme fraîche ", " Tomate"],
-    correct: 2
-  },
-  {
-    question: "3. O Clafoutis é uma sobremesa feita tradicionalmente com:",
-    answers: [" Maçã", " Pêssego", "Ameixa", "Cereja"],
-    correct: 3
-  },
-  {
-    question: "4. O que é o principal ingrediente do Croissant?",
-    answers: ["Massa folhada", "Pão de forma", "Bolo de chocolate", "Torta de maçã"],
-    correct: 0
-  },
-  {
-    question: "5. Qual prato é conhecido por sua textura elástica e é feito com purê de batata?",
-    answers: ["Ratatouille", "Aligot", "Tartiflette", "Crepe Suzette"],
-    correct: 1
-  }
-];
+<audio id="correct-sound" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg" preload="auto"></audio>
+<audio id="wrong-sound" src="https://actions.google.com/sounds/v1/cartoon/boing.ogg" preload="auto"></audio>
 
-let currentQuestion = 0;
-let score = 0;
-
-const questionEl = document.getElementById("question");
-const answersEl = document.getElementById("answers");
-const nextBtn = document.getElementById("next-btn");
-const scoreEl = document.getElementById("score");
-
-function showQuestion() {
-  const q = questions[currentQuestion];
-  questionEl.textContent = q.question;
-  answersEl.innerHTML = "";
-
-  q.answers.forEach((answer, index) => {
-    const btn = document.createElement("button");
-    btn.textContent = answer;
-    btn.classList.add("answer");
-    btn.addEventListener("click", () => checkAnswer(index));
-    answersEl.appendChild(btn);
+<script>
+  // Mobile menu toggle
+  const menuToggle = document.getElementById('menu-toggle');
+  const navMenu = document.getElementById('nav-menu');
+  menuToggle.addEventListener('change', () => {
+    if (menuToggle.checked) {
+      navMenu.classList.add('show');
+    } else {
+      navMenu.classList.remove('show');
+    }
   });
-}
 
-function checkAnswer(selected) {
-  const correct = questions[currentQuestion].correct;
-  if (selected === correct) score++;
+  // Quiz data
+  const quizData = [
+    {
+      question: "Qual é o ingrediente principal do Croissant?",
+      answers: [
+        { text: "Massa folhada", correct: true },
+        { text: "Massa de pão", correct: false },
+        { text: "Massa de bolo", correct: false },
+        { text: "Massa de pizza", correct: false }
+      ]
+    },
+    {
+      question: "Qual queijo é tradicionalmente usado na Tartiflette?",
+      answers: [
+        { text: "Reblochon", correct: true },
+        { text: "Brie", correct: false },
+        { text: "Camembert", correct: false },
+        { text: "Roquefort", correct: false }
+      ]
+    },
+    {
+      question: "De qual região da França vem o Ratatouille?",
+      answers: [
+        { text: "Provença", correct: true },
+        { text: "Normandia", correct: false },
+        { text: "Bretanha", correct: false },
+        { text: "Alsácia", correct: false }
+      ]
+    },
+    {
+      question: "Qual sobremesa francesa é feita com cerejas frescas?",
+      answers: [
+        { text: "Clafoutis", correct: true },
+        { text: "Crème brûlée", correct: false },
+        { text: "Tarte Tatin", correct: false },
+        { text: "Éclair", correct: false }
+      ]
+    },
+    {
+      question: "Quem popularizou a culinária francesa nos EUA?",
+      answers: [
+        { text: "Julia Child", correct: true },
+        { text: "Paul Bocuse", correct: false },
+        { text: "Alain Ducasse", correct: false },
+        { text: "Gordon Ramsay", correct: false }
+      ]
+    }
+  ];
 
-  currentQuestion++;
-  if (currentQuestion < questions.length) {
+  const questionEl = document.getElementById('question');
+  const answersEl = document.getElementById('answers');
+  const nextBtn = document.getElementById('next-btn');
+  const scoreEl = document.getElementById('score');
+  const progressBar = document.getElementById('progress-bar');
+
+  const correctSound = document.getElementById('correct-sound');
+  const wrongSound = document.getElementById('wrong-sound');
+
+  let currentQuestionIndex = 0;
+  let score = 0;
+
+  function startQuiz() {
+    currentQuestionIndex = 0;
+    score = 0;
+    nextBtn.disabled = true;
+    scoreEl.textContent = '';
     showQuestion();
-  } else {
-    endQuiz();
   }
-}
 
-function endQuiz() {
-  questionEl.style.display = "none";
-  answersEl.style.display = "none";
-  nextBtn.style.display = "none";
-  scoreEl.textContent = `Você acertou ${score} de ${questions.length} perguntas!`;
-  scoreEl.style.display = "block";
-}
+  function showQuestion() {
+    nextBtn.disabled = true;
+    answersEl.innerHTML = '';
+    questionEl.style.opacity = 0;
 
-nextBtn.addEventListener("click", () => {
-  showQuestion();
-});
+    setTimeout(() => {
+      const currentQuestion = quizData[currentQuestionIndex];
+      questionEl.textContent = currentQuestion.question;
+      questionEl.style.opacity = 1;
+      updateProgress();
 
-showQuestion(); // inicia o quiz
+      currentQuestion.answers.forEach(answer => {
+        const btn = document.createElement('button');
+        btn.classList.add('answer');
+        btn.textContent = answer.text;
+        btn.setAttribute('type', 'button');
+        btn.setAttribute('aria-pressed', 'false');
 
-  </script>
+        btn.addEventListener('click', () => selectAnswer(btn, answer.correct));
+        answersEl.appendChild(btn);
+      });
+    }, 300);
+  }
+
+  function selectAnswer(btn, correct) {
+    const buttons = answersEl.querySelectorAll('button');
+    buttons.forEach(b => {
+      b.disabled = true;
+      b.classList.add('disabled');
+      b.setAttribute('aria-pressed', 'false');
+    });
+
+    btn.setAttribute('aria-pressed', 'true');
+
+    if (correct) {
+      btn.classList.add('correct');
+      score++;
+      correctSound.play();
+    } else {
+      btn.classList.add('incorrect');
+      wrongSound.play();
+      // mostrar a resposta correta visualmente
+      const correctBtn = Array.from(buttons).find(b => b !== btn && quizData[currentQuestionIndex].answers.find(a => a.text === b.textContent).correct);
+      if (correctBtn) {
+        correctBtn.classList.add('correct');
+      }
+    }
+
+    nextBtn.disabled = false;
+  }
+
+  function updateProgress() {
+    const percent = ((currentQuestionIndex) / quizData.length) * 100;
+    progressBar.style.width = percent + '%';
+  }
+
+  nextBtn.addEventListener('click', () => {
+    currentQuestionIndex++;
+    if (currentQuestionIndex < quizData.length) {
+      showQuestion();
+    } else {
+      showScore();
+    }
+  });
+
+  function showScore() {
+    questionEl.textContent = 'Você concluiu o quiz!';
+    answersEl.innerHTML = '';
+    nextBtn.disabled = true;
+    progressBar.style.width = '100%';
+    scoreEl.textContent = `Sua pontuação: ${score} / ${quizData.length}`;
+  }
+
+  startQuiz();
+</script>
+
 </body>
 </html>
